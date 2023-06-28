@@ -7,7 +7,7 @@ on:
 
 env:
   base_branch: main
-  diff_path: 'docs/**.md'
+  diff_path: '**'
 
 jobs:
   run-actions:
