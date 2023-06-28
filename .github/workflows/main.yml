@@ -1,17 +1,9 @@
 name: run-actions-using-diff-files
 
 on:
-  pull_request:
-    types:
-      - opened
-    branches:
-      - 'main'
-    paths:
-      - 'docs/**.md'
-
-env:
-  base_branch: main
-  diff_path: 'docs/**.md'
+  push:
+    branches: 
+      - main
 
 jobs:
   run-actions:
