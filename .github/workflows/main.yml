@@ -1,8 +1,8 @@
 name: run-actions-using-diff-files
 
 on:
-  push:
-    branches: 
+  pull_request:
+    branches:
       - main
 
 jobs:
