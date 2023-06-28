@@ -35,6 +35,4 @@ jobs:
           diff_files=$(git diff --name-only HEAD ${base_branch} -- "${diff_path}" \
             | tr "\n" " ")
           echo "# diff_files: ${diff_files}"
-          ####
-          # ここから先に ${diff_files} を使った処理を記載
           npx textlint ${diff_files} --rule textlint-rule-no-dropping-the-ra
