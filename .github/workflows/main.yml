@@ -17,4 +17,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: test-result
-          path: $GITHUB_WORKSPACE/target/surefire-reports
+          path: /
