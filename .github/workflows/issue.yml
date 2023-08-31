@@ -1,0 +1,32 @@
+name: Check Existing Branch
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  check_existing_branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if branch exists
+        id: check_branch
+        run: |
+          branch_name="${GITHUB_REF##*/}"
+          if git rev-parse --quiet --verify "refs/heads/$branch_name"; then
+            echo "ブランチが存在します"
+            echo "::set-output name=branch_exists::true"
+          else
+            echo "ブランチが存在しません"
+            echo "::set-output name=branch_exists::false"
+          fi
+
+      - name: Use branch existence result
+        run: |
+          branch_exists=${{ steps.check_branch.outputs.branch_exists }}
+          if [ "$branch_exists" = "true" ]; then
+            echo "ブランチが存在する場合に何らかの処理を行う"
+          else
+            echo "ブランチが存在しない場合に何らかの処理を行う"
+          fi
