@@ -6,27 +6,22 @@ on:
       - '*'
 
 jobs:
-  check_existing_branch:
+  check-first-push:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Check if branch exists
-        id: check_branch
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Check if first push
+        id: check-push
         run: |
-          branch_name="${GITHUB_REF##*/}"
-          if git ls-remote --exit-code --heads origin "$branch_name"; then
-            echo "ブランチが存在します"
-            echo "::set-output name=branch_exists::true"
+          if [ ! -f first_push_done.txt ]; then
+            touch first_push_done.txt
+            echo "これはこのブランチへの最初のプッシュです"
           else
-            echo "ブランチが存在しません"
-            echo "::set-output name=branch_exists::false"
+            echo "このブランチは以前にプッシュされています。"
           fi
-
-      - name: Use branch existence result
-        run: |
-          branch_exists=${{ steps.check_branch.outputs.branch_exists }}
-          if [ "$branch_exists" = "true" ]; then
-            echo "ブランチが存在する場合に何らかの処理を行う"
-          else
-            echo "ブランチが存在しない場合に何らかの処理を行う"
-          fi
+        
+      - name: Use the result in later steps
+        run: echo "${{ steps.check-push.outputs.stdout }}"
