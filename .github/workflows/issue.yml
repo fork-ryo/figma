@@ -8,25 +8,17 @@ on:
 jobs:
   create-issue:
     runs-on: ubuntu-latest
-    
+    permissions:
+      issues: write
     steps:
       - name: Create Issue
         id: create-issue
-        run: |
-          BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-          ISSUE_TITLE="New branch created: $BRANCH_NAME"
-          ISSUE_BODY="A new branch $BRANCH_NAME has been created."
-          
-          # Create the issue using GitHub API
-          RESPONSE=$(curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -d "{\"title\":\"$ISSUE_TITLE\",\"body\":\"$ISSUE_BODY\"}" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues")
-          
-          # Extract the issue number from the API response
-          ISSUE_NUMBER=$(echo $RESPONSE | jq -r '.number')
-          echo "Created Issue #$ISSUE_NUMBER: $ISSUE_TITLE"
-          
-          # Store the issue number as an output
-          echo "::set-output name=issue_number::$ISSUE_NUMBER"
+        uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
+        with:
+          title: "$BRANCH_NAME"
+          body: |
+            $BRANCH_NAME
+          pinned: false
+          close-previous: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
