@@ -15,7 +15,7 @@ jobs:
         id: create-issue
         uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
         with:
-          title: "$BRANCH_NAME"
+          title: "$(echo $GITHUB_REF | sed 's/refs\/heads\///')"
           body: |
             $BRANCH_NAME
           pinned: false
