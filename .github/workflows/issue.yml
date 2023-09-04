@@ -10,14 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+
     steps:
       - name: Create Issue
         id: create-issue
-        uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
+        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')"
+      - uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
         with:
-          title: "$(echo $GITHUB_REF | sed 's/refs\/heads\///')"
+          title: ${{ env.BRANCH_NAME }}
           body: |
-            $(echo $GITHUB_REF | sed 's/refs\/heads\///')
+            ${{ env.BRANCH_NAME }}
           pinned: false
           close-previous: false
         env:
